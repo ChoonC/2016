@@ -130,6 +130,10 @@ sum(X)
 Assessment: Develop a sampling model for betting on 7 on roulette:
 
 ## The Expected Value and Standard Error
+```{r}
+X <- sample( c(-1,35), 10, replace = TRUE, prob=c(37/38, 1/38))
+sum(X)
+```
 
 Now that we have described sampling models, now we can describe properties of the sum of draws. The first important concept to learn is the _expected value_. The random variable will vary around this expected value. 
 The _standard error_ gives us an idea of how the size of the variation around the expected value.
@@ -147,6 +151,12 @@ We can see that the average of values inside a jar with 0s and 1s is the number 
 Assessment: What are the averages for the roulette examples? [http://goo.gl/forms/XNIW22JSsc](http://goo.gl/forms/XNIW22JSsc)
 - Betting on black 
 - Betting on 7
+```{r}
+9/19-10/19
+-37/38+35/38
+
+```
+
 
 In our example with the election we know that the average of the box is $p$, we just don't know what $p$ is just yet.
 
@@ -205,12 +215,35 @@ Which is not terribly useful. However, now we know that we can be more precise b
 
 Assessment: If $p=0.5$, how large should the poll be to have a standard error of 2% or less ? Then take a poll and report expected value and standard error [http://goo.gl/forms/R9Ke1UfHBB](http://goo.gl/forms/R9Ke1UfHBB)
 
+$$\sqrt{0.5(1-0.5)} / \sqrt{N} = 0.02$$
+
+implies 
+    N = 0.25/0.02^2 = 625
+    
+```{r}
+N <- 625
+X <- sample(x,N,replace=TRUE)
+p_hat <- mean(X)
+cat("Our estimate of the percent of democrats is", p_hat, "plus or minus", round(sqrt(p_hat*(1-p_hat)/N),5))
+```
 
 ## Probability Distribution for Random Variables
 
 The plus or minus statements above are not very precise. Is it possible to say more? Can we, for example, compute the probability that $\hat{p}$ is within 1% of the actual $p$ ? It turns out that we can. First let's start with a Monte Carlo simulation. 
 
 Assessment: Repeat the exercise of taking a poll of 625 likely voters, 10,000 times. Without peaking at $p$ study the distribution of $\hat{p}-p$. Have we seen this distribution before? How often was our error smaller larger than 0.02? [http://goo.gl/forms/JqyeuvvJiR](http://goo.gl/forms/JqyeuvvJiR)
+
+```{r}
+N<- 625
+B<- 10^4
+error <- replicate(B, {X<- sample(x,N,replace=TRUE)
+  mean(X)-p
+})
+hist(error)
+mean(abs(error) > 0.02)
+
+```
+
 
 The distribution we see here is the _probability distribution_ of our random variable. Knowing this distribution will be extremely helpful because we can, for example, report the probability that our error is smaller than a particular quantity. In the next section we describe a powerful mathematical result that helps simplify this.
 
@@ -238,7 +271,7 @@ mean(abs(error) > 0.02)
 pnorm(-1) + (1-pnorm(1))
 ```
 
-Notice that the Monte Carlo simulation is like conducting 10,000 polls. This of course is practically impossible. But the mathematical theory saves us from having to do this! Without just one poll we are able to say that our estimate is $\hat{p}$ and there is 32% chance that our error is larger than 2%. 
+Notice that the Monte Carlo simulation is like conducting 10,000 polls. This of course is practically impossible. But the mathematical theory saves us from having to do this! With  just one poll we are able to say that our estimate is $\hat{p}$ and there is 32% chance that our error is larger than 2%. 
 
 ## Confidence Intervals
 
