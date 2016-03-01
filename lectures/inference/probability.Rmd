@@ -1,6 +1,6 @@
 ---
 title: "Probability"
-output: html_document
+output: word_document
 ---
 
 # Probability and Inference

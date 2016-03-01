@@ -1,6 +1,6 @@
 ---
-title: Homework with Git and GitHub
-output: html_document
+title: "Homework with Git and GitHub"
+output: word_document
 ---
 
 Starting with homework 2 in BIO 260 and CSCI E-107, we will be using 
