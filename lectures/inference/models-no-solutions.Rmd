@@ -1,7 +1,6 @@
 ---
 title: "Models"
-<<<<<<< HEAD
-output: pdf_document
+output: html_document
 fontsize: 12pt
 ---
 
@@ -9,7 +8,6 @@ fontsize: 12pt
 We're going to try something new today. If you have small technical questions during class, go to this [link](https://docs.google.com/document/d/1rClyG2ZMoTM9tER9zjXCBT-26lrpuIH_oSkCLCI6pII/edit?usp=sharing) and ask away.
 
 
->>>>>>> course/master
 # Statistical Models
 
 "All models are wrong, but some are useful" -George E. P. Box
@@ -33,14 +31,13 @@ Each observation has an _error_ term $\varepsilon$. We assume that the expected 
 
 Let's consider some simple examples
 
-#### Assessment
+#### Assessment 1: http://goo.gl/forms/xN35fstJky
 
 This is a contrived example, but it will help us understand how we think about models and can use them in many situations. 
 
 If we are betting on black on roulette, we can let $Y_i$ be either -1 or 1. Now what is $\theta$ and what is the distribution of our error? What is the standard deviation of the errors? Hint: the expected value of the error must be 0.
 
-<<<<<<< HEAD
-=======
+
 Answer: Our parameter is $\theta = -1/19$ and our errors are $1 - \theta$ with probability $9/19$ and $-1 - \theta$ with probability $10/19$. 
 
 Double check that the expected value is 0:
@@ -60,8 +57,8 @@ sqrt(mean(error^2))
 2*sqrt(10/19*9/19)
 ```
 
->>>>>>> course/master
-#### Assessment
+
+#### Assessment 2: http://goo.gl/forms/XLQQh69MUO
 
 Let's consider the example of a demographer trying to estimate the average height of a population. We use the heights stored in R:
 
@@ -79,24 +76,22 @@ Y <- sample(y, 25, replace = TRUE)
 
 What are $\theta$, $N$, and $\varepsilon_1$ ?
 
-<<<<<<< HEAD
-=======
+
 ```{r}
 ## N is 
 length(Y)
 ## theta is 
 theta <- mean(y)
-## the first error is 
+## the firest error is 
 error_1 <- Y[1] - theta
 ```
 
->>>>>>> course/master
-#### Assessment 
+
+#### Assessment 3: http://goo.gl/forms/CfamwJBctA
 
 Note that in this example each individual in the population has an _error_. It may sound a bit strange but, if you are 1 inch taller than the average height, we call it an "error" of 1 inch. Compute all the errors for the population and explore the distribution. What is the standard deviation of this distribution?
 
 A) Exactly normal with $\sigma$ of about 3 inches
-<<<<<<< HEAD
 
 B) Approximately normal with $\sigma$ of about 3 inches. Tails are slightly larger.
 
@@ -104,22 +99,17 @@ C) These are not averages or sums so it is not approximately normal.
 
 D) Approximately normal with $\sigma$ of about 9 inches. Tails are slightly larger.
 
-=======
-B) Approximately normal with $\sigma$ of about 3 inches. Tails are slightly larger.
-C) These are not averages or sums so it is not approximately normal.
-D) Approximately normal with $\sigma$ of about 9 inches. Tails are slightly larger.
-
+ANSWER : B
 ```{r}
 error <- y - mean(y)
 hist(error)
 ##the standard error is:
-sigma <- sqrt( mean( (error)^2 ))
+sigma <- sqrt(mean(error^2))
 qqnorm(error/sigma)
 abline(0,1)
 ```
 
 
->>>>>>> course/master
 
 ## Modeling Poll Results
 
@@ -136,13 +126,13 @@ tab <- mutate(tab,estimate=ifelse(estimate<1, estimate*100, estimate)) %>%
   filter(estimate>20)
 ```
 
-A total of 27 people used a sample size of about 100.
+A total of 27 people used a sample size of about 100 (between 50 and 150)
 
 ```{r}
 filter( tab, abs(poll_sample_size-100)<51) %>% nrow
 ```
 
-Very important: do not confuse the poll sample size with the number of observations in our model. Here each poll is an observation: $N=27$ while the poll sizes are about 100.
+Very important: do not confuse the poll sample size with the number of observations (27) in our model. *Here each poll is an observation: $N=27$ while the poll sizes are about 100.*
 
 Let's consider only those polls:
 
@@ -154,27 +144,23 @@ So we can write a model:
 
 $$Y_i = \theta + \varepsilon_i, i=1, \dots, N$$
 
-with $N=22$.
+with $N=27$.
 
-#### Assessment
+#### Assessment 4: http://goo.gl/forms/iyXi76a4b0
 
 Using the CLT theory we have learned, how do we model $\varepsilon$, what is the expected value and standard deviation of 
 $\varepsilon$? 
 
-<<<<<<< HEAD
-=======
 Answer: According to CLT 
 
 $$ \varepsilon \sim \mbox{Normal}\left( 0, \frac{\sqrt{\theta (1-\theta)}}{\sqrt{100}} \right)$$
->>>>>>> course/master
 
-#### Assessment 
+
+#### Assessment 5: http://goo.gl/forms/0sYp0gFnxZ
 
 We already revealed that $\theta = 0.534$. Use this information and 
 data exploration to check if the model assumptions make sense. 
 
-<<<<<<< HEAD
-=======
 ```{r}
 theta <- 0.534
 Y <- tab$estimate/100 
@@ -184,7 +170,7 @@ se <- sqrt(theta*(1-theta))/sqrt(100)
 qqnorm(error/se)
 abline(0,1)
 ```
->>>>>>> course/master
+
 
 
 ### Estimating parameters
@@ -217,10 +203,7 @@ $$
 We can compare this empirical approach to the more theoretical approach we have been using:
 
 ```{r}
-<<<<<<< HEAD
 theta <- mean(y)
-=======
->>>>>>> course/master
 sd(Y) ##compared to 
 sqrt(theta*(1-theta))/sqrt(100) ##or to
 theta_hat <- mean(Y)
@@ -304,21 +287,17 @@ select(tab, start_date, end_date)
 tab <- tab %>% mutate(end_date = ifelse(is.na(end_date), start_date, end_date))
 select(tab, start_date, end_date)
 
-## no use seprate again to get month, day and year for start_date
+## now use separate again to get month, day and year for start_date
 tab <- tab %>% separate(start_date, c("smonth", "sday", "syear"), sep = "/", 
                         convert = TRUE, fill = "right") 
 select(tab, smonth:syear, end_date)
 
-<<<<<<< HEAD
 ### if end data has only 1 / then it is missing month, add it
-=======
-### if end date has only 1 / then it is missing month, add it
->>>>>>> course/master
 tab <- tab %>% mutate(end_date = ifelse(str_count(end_date, "/") == 1, 
                                    paste(smonth, end_date, sep = "/"), end_date))
 select(tab, smonth:syear, end_date)
 
-## now use lubridate function mdy to conver to date
+## now use lubridate function mdy to convert to date
 tab <- tab %>% mutate(end_date = mdy(end_date)) 
 select(tab, smonth:syear, end_date)
 
@@ -348,12 +327,7 @@ head(tab$`N/Pop`)
 This column combines the sample size with the type population used by the poll. For example, LV means Likely Voters. We can use split again.
 
 ```{r}
-<<<<<<< HEAD
 tab <- separate(tab, `N/Pop`, into=c("N","population_type"), sep="\ ", convert=TRUE, fill="left")
-=======
-tab <- separate(tab, `N/Pop`, into=c("N","population_type"), sep=" ", 
-                convert=TRUE, fill="left")
->>>>>>> course/master
 ```
 
 
@@ -365,11 +339,7 @@ tab <- mutate(tab, Obama = as.numeric(Obama)/100,
               McCain=as.numeric(McCain)/100,
               diff = Obama - McCain,
               day=as.numeric(start_date - mdy("11/04/2008")),
-<<<<<<< HEAD
               week = as.numeric(floor(day/7)))
-=======
-              week = floor(day/7))
->>>>>>> course/master
 ```
 
 ## Modeling Poll Results (continued)
@@ -386,22 +356,17 @@ $$Y_i = \theta + \varepsilon_i, i=1, \dots, N$$
 
 with $N=22$.
 
-<<<<<<< HEAD
-#### Assessment 
+#### Assessment 6: http://goo.gl/forms/BYmGozyUYX
 
 Using the CLT theory we have learned, how do we model $\varepsilon$, what is the expected value and standard deviation of 
-$\varepsilon$? 
-
-=======
-Assessment: Using the CLT theory we have learned, how do we model $\varepsilon$, what is the expected value and standard deviation of 
 $\varepsilon$? 
 
 Answer: According to CLT 
 
 $$ \varepsilon \sim \mbox{Normal}\left(0, \frac{\sqrt{\theta (1-\theta)}}{\sqrt{800}}\right)$$
->>>>>>> course/master
 
-#### Assessment 
+
+#### Assessment 7: http://goo.gl/forms/ZAbd1crfK3
 
 Use data exploration to check if the model assumptions make sense. Note that we have the benefit of hindsight. The election night result was $\theta = 52.9 - 45.7 = 7.2$. 
 
@@ -413,8 +378,7 @@ C. The data look approximately normal but the expected and standard error are no
 
 D. I have no idea what to do.
 
-<<<<<<< HEAD
-=======
+
 ```{r}
 Y <- filter(tab, N==800)$diff
 theta <- 7.2/100
@@ -426,7 +390,8 @@ abline(0,1)
 ```
 
 It's not even close! What's going on. Well our model is clearly wrong. The $\varepsilon$ do not appear to have the predicted expected value nor standard error.
->>>>>>> course/master
+
+
 
 ### Explaining variance
 
@@ -441,12 +406,10 @@ What could explain this variability?
 
 The first thing that comes to mind is that we polls are taken for over a year and the $\theta$ six months before the election might be different.
 
-#### Assessment
+#### Assessment 8: http://goo.gl/forms/GVpfbBu7V5
 
 Use ggplot to make a plot of the estimated difference versus day. What do you observe? Just form looking at the plot what would you say is that standard deviation of $\theta$ if we let it change with time?
 
-<<<<<<< HEAD
-=======
 ```{r}
 library(ggplot2)
 theme_set(theme_bw())
@@ -455,23 +418,14 @@ tab %>% ggplot( aes(start_date, diff)) + geom_point() +
   geom_hline(aes(yintercept=0))
 
 ```
->>>>>>> course/master
+
 
 The SD is at least 5%
 
-#### Assessment
 
-<<<<<<< HEAD
+#### Assessment 9: http://goo.gl/forms/9q5SSXk6iM
+
 Take a look at polls that happened in 2008.
-=======
-Take a look at polls that happened in 2008:
-
-```{r}
-tab %>% filter(start_date > "2008-01-01") %>%
-  ggplot( aes(start_date, diff)) + geom_point() +
-  geom_hline(aes(yintercept=0))
-```
->>>>>>> course/master
 
 There seems to be clear time effect. We could amend the model to be
 
@@ -509,11 +463,8 @@ group_by(tab, week) %>% summarize(avg=mean(diff))
 We can make a quick plot
 
 ```{r}
-<<<<<<< HEAD
 library(ggplot2)
 
-=======
->>>>>>> course/master
 group_by(tab, week) %>% summarize(avg=mean(diff)) %>% 
   ggplot(aes(week, avg)) + geom_line() +
   geom_hline(aes(yintercept=0))
@@ -552,7 +503,7 @@ group_by(tab, week) %>% mutate(num_polls=n()) %>%
 ```
 
 
-### Assessment
+### Assessment 10: http://goo.gl/forms/ntaC4r5H7m
 
 Make the same plot to add bars that show 2 SD above and below the average. Answer the questions below.
 

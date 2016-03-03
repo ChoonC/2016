@@ -1,5 +1,5 @@
 ---
-title: "Homework 3: Is Donald Trump going to win the republican nomination?"
+title: 'Homework 3: Is Donald Trump going to win the republican nomination?'
 output: html_document
 ---
 
@@ -35,7 +35,10 @@ to select the right `topic` and make sure to change the `max_pages` argument.
 
 
 ```{r, echo=FALSE, cache=TRUE, warning=FALSE, message=FALSE}
-##Your code here
+
+library(pollstR)
+
+race2016 <- pollstr_polls(topic = '2016-president-gop-primary', max_pages = Inf)
 
 ```
 
@@ -51,6 +54,12 @@ use `dplyr`. How many rows are we left with?
 
 ```{r}
 ##Your code here
+library(tidyr)
+
+theme_set(theme_bw())
+results <- race2016$questions %>% filter(topic=="2016-president-gop-primary" & state != "US") 
+
+results %>% nrow
 
 ```
 
@@ -63,7 +72,7 @@ did we actually have?
 Hint: look at the `id` column and use the `group_by` command.
 
 ```{r}
-##Your code here
+table(results$id) %>% nrow
 
 ```
 
@@ -75,7 +84,8 @@ What date was this poll conducted?
 Hint: Use the `polls` component of the `race2016` object to find the date.
 
 ```{r}
-##Your code here
+id1 <- results[1,]$id
+race2016$polls %>% filter(id == id1) %>% select(start_date)
 
 ```
 
@@ -88,7 +98,19 @@ dropped out. We also have entries such as `No one`, `No One` and
 `No Preference`. Filter the `results` table to include only Rubio and Trump. 
 
 ```{r}
-##Your code here
+
+polls <- race2012$questions %>% 
+  filter(topic=="2012-president" & state=="US") %>% 
+  select(choice, value, margin_of_error, observations, id) %>% 
+  filter(choice %in% c("Obama","Romney") & !is.na(margin_of_error)) %>% 
+  spread(choice, value) %>% 
+  left_join(select(race2012$polls, id, pollster, method), by="id") %>%
+  filter(method!="Internet") %>%
+  mutate(diff= Obama - Romney) %>%
+  select(pollster, diff, Obama, Romney, margin_of_error, observations)
+
+arrange(polls,diff) %>% rename( n=observations) %>% 
+  mutate(pollster=ifelse(pollster=="PPP (D-Americans United for Change)","PPP",pollster))
 
 ```
 
@@ -135,7 +157,11 @@ Hint: `race2016$survey_house` has the information you need.
 ```
 
 
+<<<<<<< HEAD
 ## Problem 2
+=======
+# Problem 2
+>>>>>>> course/master
 
 We now have a table with all the information we need. We will now use 
 the results from Iowa, New Hampshire, Nevada and South Carolina 
@@ -144,7 +170,11 @@ to determine how to create a prediction for upcoming primaries.
 ## Problem 2A 
 
 Use an internet search to determine the results for the Iowa, 
+<<<<<<< HEAD
 New Hampshire, Nevada and South Carolina primaries for the top three
+=======
+New Hampshire, Nevada and South Carolina primaries for the top two
+>>>>>>> course/master
 candidates. Create a table called `actual` with this information. 
 Also, create a column with the actual election difference.
 Use a join function to add this information to our `results` table. 
@@ -209,7 +239,11 @@ impacts accuracy.
 ```
 
 
+<<<<<<< HEAD
 # Problem 2F
+=======
+## Problem 2F
+>>>>>>> course/master
 
 For polls from IA, NH, and SC, aggregate all polls from within 1 week of the 
 election (use the `start_date` to determine cutoff) to provide a 
@@ -287,11 +321,19 @@ Trump beating Rubio in Florida.
 ```
 
 
+<<<<<<< HEAD
 ## Problem 4
 
 Use the poll data as well as the results from Super Tuesday (March 1st) and other election results that happen before the deadline to make predictions for each remaining primary. Then use these results to estimate the probability of Trump winning the republican nomination. Justify your answer with figures, statistical arguments, and Monte Carlo simulations.
 
 It will help to learn about how delegates are assigned. Here is [the manual](http://www.scribd.com/doc/294928557/2016-Presidential-Nominating-Process-Book-version-2-0-Dec-2015-pdf)
+=======
+# Problem 4
+
+Use the poll data as well as the results from Super Tuesday (March 1st) and other election results that happen before the deadline to make predictions for each remaining primary. Then use these results to estimate the probability of Trump winning the republican nomination. Justify your answer with figures, statistical arguments, and Monte Carlo simulations.
+
+It will help to learn about how delegates are assigned. Here is [the manual].(http://www.scribd.com/doc/294928557/2016-Presidential-Nominating-Process-Book-version-2-0-Dec-2015-pdf)
+>>>>>>> course/master
 
 
 

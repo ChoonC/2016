@@ -1,6 +1,6 @@
 ---
 title: "Inference"
-output: html_document
+output: word_document
 ---
 
 # Inference 
@@ -166,11 +166,11 @@ $$ \sigma = \sqrt{ \frac{1}{n} \sum_i^n (x_i - \mu)^2} $$
 we can derive, with a bit of math, that if a jar has two values $a$ and $b$ with proportions $p$ and $(1-p)$ respectively, the standard deviation is $\mid b - a \mid \sqrt{p(1-p)}$.
 
 *Proof*
-Expected value, E(X) = ap + b(1-p) 
-Variance, $$ Var(X) = E(X^2) - E(X)^2 $$
-Now, $$ E(X^2) = a^2p + b^2(1-p) $$ and $$ E(X)^2 = a^2p^2 + 2abp(1-p)+b^2(1-p)^2 $$
+Expected value, $E(X) = ap + b(1-p)$
+Variance, $Var(X) = E(X^2) - E(X)^2 $
+Now, $$E(X^2) = a^2p + b^2(1-p)$$ and $$ E(X)^2 = a^{2}p^{2} + 2abp(1-p)+b^{2}(1-p)^2$$
 so $$ Var(X) = a^2p(1-p)+b^2(1-p)(1-(1-p))-2abp(1-p) $$
-   $$       = a^2p(1-p)-2ab.p(1-p)+b^2p(1-p) $$
+   $$       = a^2p(1-p)-2abp(1-p)+b^2p(1-p) $$
    $$       = (a-b)^2p(1-p) $$
  $$ std(X) = |a-b|\sqrt{(p(1-p)} $$
 
