@@ -1,6 +1,6 @@
 ---
 title: "Poll Aggregators"
-output: html_document
+output: word_document
 ---
 
 ## In-class questions
