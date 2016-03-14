@@ -13,7 +13,11 @@ $$\mbox{Prob}(+\mid D)=0.99, \mbox{Prob}(-\mid \mbox{no } D)=0.99,$$
 
 
 * If we select a random person and they test positive, what is the probability that they have disease? 
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> course/master
 * We write this as $\mbox{Prob}(D\mid+)?$
 
 * Cystic fibrosis rate is $\mbox{Prob}(D) \approx 0.00025$
@@ -66,6 +70,7 @@ Assessment: Write a Monte Carlo simulation that shows this. Let's go step-by-ste
 * Repeat 10,000
 * Compute TP / P = TP / (TP +FP)
 
+<<<<<<< HEAD
 
 ```{r}
 B<-10^5
@@ -77,6 +82,8 @@ res <- replicate(B,{
 sum(res[2,]==1 & res[1,]==1)/sum(res[2,]==1)
 ```
  outcome <- IFELSE(x==1 & test==1,"TP", IFELSE(x==1 & test==0,"FN",))
+=======
+>>>>>>> course/master
 Simulation
 ===
 
@@ -103,7 +110,11 @@ plot(people2,type="n",pch=16,xaxt="n",yaxt="n",xlab="",ylab="",main="Tested Nega
 
 ```{r,eval=FALSE,include=FALSE}
 library(animation)
+<<<<<<< HEAD
 file.remove("C:/Users/Choon/Harvard Ext Data Science/2016/lectures/models/lecture14/bayes.gif")
+=======
+file.remove("/Users/ririzarr/myDocuments/teaching/cs109/2014_working/lectures/lecture14/bayes.gif")
+>>>>>>> course/master
 saveGIF({
 i=1
 while(count3<=(N*M/2) & count2<=(N*M/2)){
@@ -118,7 +129,11 @@ while(count3<=(N*M/2) & count2<=(N*M/2)){
   outcome <- ifelse(x[i]==1, as.numeric(test<=min), as.numeric(test>min))
   if(outcome==0) {cols3[count3]<-cols1[i];count3<-count3+1} else {cols2[count2]<-cols1[i];count2<-count2+1}
   i<-i+1
+<<<<<<< HEAD
 }},'bayes.gif', interval = .1, ani.width = 800, ani.height = 500,outdir="C:/Users/Choon/Harvard Ext Data Science/2016/lectures/models/lecture14")
+=======
+}},'bayes.gif', interval = .1, ani.width = 800, ani.height = 500,outdir="/Users/ririzarr/myDocuments/teaching/cs109/2014_working/lectures/lecture14")
+>>>>>>> course/master
 ```
 
 Simulation
