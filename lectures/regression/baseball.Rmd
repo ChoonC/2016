@@ -1,6 +1,10 @@
 ---
 title: "Baseball"
+<<<<<<< HEAD
 output: word_document
+=======
+output: html_document
+>>>>>>> course/master
 fontsize: 12pt
 ---
 
