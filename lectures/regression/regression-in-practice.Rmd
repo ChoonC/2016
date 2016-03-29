@@ -49,6 +49,8 @@ dat <- Batting %>% filter(yearID%in%2013:2014) %>% group_by(playerID,yearID) %>%
   spread(yearID, AVG) %>% filter(!is.na(`2013`) & !is.na(`2014`))
 dat <- right_join(playerInfo, dat, by="playerID") %>% filter(POS!="P") %>% select(-POS)
 arrange(dat, desc(`2013`)) %>% select(-playerID)
+dat2 <- rename(dat, x=`2013`, y=`2014`)
+plot(dat2$x, dat2$y)
 ```  
 
 Note that the same pattern arises. Batting averages go down. But look at what happens at for the worse hitters of 2013:
@@ -57,10 +59,14 @@ Note that the same pattern arises. Batting averages go down. But look at what ha
 arrange(dat, `2013`) %>% select(-playerID)
 ```
 
-### Assessment
+### Assessment 1: http://goo.gl/forms/jcrVC3vWjT
 
 Miguel Cabrera hit 348 in 2013. Use linear regression to predict his 2014 average. Use the `broom` package to get a prediction for all players. In general how does the prediction for 2014 compare to the 2013 performance? 
 
+```{r}
+fit <- dat2 %>% do(augment(lm(y~x, data=.), data=.))
+select(fit, nameFirst, nameLast, x, .fitted, y) %>% arrange(desc(x)) %>% tbl_df
+```
 
 ## Regression Fallacy 
 
@@ -74,6 +80,7 @@ We can see this in a scatterplot of the standardized values:
 
 ```{r}
 dat %>% ggplot(aes(scale(`2013`), scale(`2014`))) + geom_point() + geom_smooth(method = "lm", se=FALSE, col="blue") + geom_abline(intercept = 0, slope = 1) + xlab("2013") + ylab("2014") +  scale_x_continuous(limits=c(-3,3)) +  scale_y_continuous(limits=c(-3,3))
+
 ```
 
 The data look very much like a bivariate normal distribution which means we predict 2014 batting average $Y$ for any given player that had 2013 batting average $X$ with:
@@ -134,22 +141,32 @@ This seems to imply we should search for players with few HR but many BB as they
 
 One way we can answer this question is by keeping HR fixed and examining the relationship within the strata. 
 
-#### Assessment 
+#### Assessment 2: http://goo.gl/forms/HFWju4Ux2a
 
 We can't perform this analysis on a single year, because there are not enough teams to obtain strata with more than one or two teams. Instead we will combine all data years since 1961. 
 
 Start by creating a data set with R, BB and HR for every team from 1961 to today. What is the correlation between each of the three pairs.
 
+```{r}
 
-#### Assessment 
+#162 to filter out years where there is a shorten season because of strike, and teams that may not have played 162 games (e.g. weather cancellation)
+Teams %>% filter(yearID >= 1961 & G == 162)  %>% summarize(cor(R,BB), cor(R,HR), cor(BB, HR))
+```
+#### Assessment 3: http://goo.gl/forms/NQD3X54EdK
 
-One way to eliminate the the possibility the the BB effect on runs is driven by the confounding with HR is to keep HRs fixed and then examine the relationship. Give a confidence interval for the effect of BB on R for teams with 120-130 HRs. Make a plot to see if the 
+One way to eliminate the the possibility that the BB effect on runs is driven by the confounding with HR is to keep HRs fixed and then examine the relationship. Give a confidence interval for the effect of BB on R for teams with 120-130 HRs. Make a plot to see if the 
 Consider only teams from 1961 and beyond. 
 
 Compare to the coefficient when we don't stratify.
+```{r}
+dat <- Teams %>% filter(yearID >= 1961 & G == 162 & HR %in%120:130)
+dat %>% ggplot(aes(BB, R)) + geom_point() + geom_smooth(method="lm")
+dat %>% lm(R ~BB, data=.) %>% tidy(conf.int = TRUE)
+
+```
 
 
-#### Assessment
+#### Assessment 4: http://goo.gl/forms/Pf8bcPVUsN
 
 Now let's see if this holds for other strata.
 
@@ -165,9 +182,12 @@ table(group)
 You this idea to make a scatter plot of R versus BB for 10 HR strata. Hint: use `facet_wrap`
 
 ```{r}
+my_data <- Teams %>% filter(yearID >= 1961 & G == 162) %>% mutate(group=cut(HR, quantile(HR, prob=seq(0,1,.1)), include.lowest = TRUE))
+my_data %>% ggplot(aes(BB,R)) + geom_point() + geom_smooth(method = "lm") + facet_wrap(~group)
+
 ```
 
-#### Assessment
+#### Assessment 5: http://goo.gl/forms/eqwKLzuwZF
 
 While the BB effect was certainly lower than before we controlled for HR, but it appears to be there. To check more formally we can fit a linear model to each strata.
 
@@ -175,10 +195,6 @@ While the BB effect was certainly lower than before we controlled for HR, but it
 Note that the intercept increases linearly and that the BB effect seems about constant:
 
 ```{r}
-my_data <- Teams %>%  filter(yearID >= 1961 & G==162 & HR %in% 125:130)
-my_data <- Teams %>%  filter(yearID >= 1961 & G==162) %>%
-  mutate(group = cut(HR, quantile(HR, prob = seq(0,1,.1)), include.lowest=TRUE))
-
 res <- my_data %>% group_by(group) %>%
   do(tidy(lm(R ~ BB, data = .))) %>% ungroup
 

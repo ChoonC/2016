@@ -2,7 +2,7 @@
 title: "Regression with broom and dplyr"
 author: "David Robinson"
 date: "March 23, 2016"
-output: html_document
+output: word_document
 ---
 
 ```{r echo = FALSE}
@@ -15,7 +15,8 @@ opts_chunk$set(message = FALSE)
 Install it with:
 
 ```{r}
-install.packages("broom")
+#install.packages("broom")
+library(broom)
 ```
 
 I'll start by listing some worthwhile resources for dplyr and broom:
