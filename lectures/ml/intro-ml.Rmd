@@ -1,5 +1,5 @@
 ---
-output: html_document
+output: word_document
 ---
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -140,6 +140,8 @@ For the father and son heights round each father height to the nearest intenger 
 ```{r}
 data(father.son,package="UsingR")
 X <- round(father.son$fheight)
+
+father.son %>% filter(round(father.son$fheight)==66) %>% summarize(mean(sheight))
 ```
 
 What is you prediction for son's height when $X=66$? Hint: use conditional expectation
@@ -178,10 +180,16 @@ father.son %>% ggplot(aes(fheight, sheight)) + geom_point() +
 #### Assessment 4: http://goo.gl/forms/Pf8bcPVUsN
 
 1. What is the prediction rule to predict son's height from father's height? Hint: We know that the regression line provides and estimate of $\mbox{E}\left( Y \mid X=x\right)$.
-
+```{r}
+father.son %>%
+  lm(sheight ~ fheight, data = .)  %>% tidy
+```
 
 2. What is the prediction rule to predict father's height from son's height?
-
+```{r}
+father.son %>%
+  lm(fheight ~ sheight, data = .)  %>% tidy
+```
 
 ## Regression for a binary outcome
 
@@ -343,7 +351,7 @@ fit <- dat %>% filter(train) %>%
 
 dat <- mutate(dat, glm_f_hat = 
                 predict(fit, newdata = dat, type="response")) %>%
-  mutate(glm_pred=round(f_hat))
+  mutate(glm_pred=round(glm_f_hat))
 
 dat %>% filter(!train) %>% select(truth, glm_pred, height, glm_f_hat) %>% slice(1:10) %>% kable(digits=2)
 ```
@@ -434,7 +442,7 @@ dat27 <- mutate(dat27, label =  as.character(label))
 ```
 
 
-Note that two distinguish 2s from 7s it might be enough to look at the number of non-white pixels in the upper-left and lower-bottom quadrants:
+Note that to distinguish 2s from 7s it might be enough to look at the number of non-white pixels in the upper-left and lower-bottom quadrants:
 
 ```{r, echo=FALSE}
 tmp <- lapply( c(40,45), function(i){
@@ -471,7 +479,7 @@ For illustrative purposes we consider this to be the population and use this dat
 ```{r, echo=FALSE, cache=TRUE}
 y <- as.factor(dat27$label)
 x <- cbind(X1, X2)
-library(RColorBrewer)
+library(RColorBrewer) 
 my_colors <- brewer.pal(11,"RdBu")
 library(caret)
 fit <- knn3(x, y, 401)
