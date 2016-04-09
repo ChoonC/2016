@@ -75,18 +75,19 @@ Instead of fitting a line, let's go back to the idea of stratifying and computin
 ```{r binsmoother,fig.width=10.5,fig.height=5.25,echo=FALSE}
 span <- 7
 dat2 <- dat %>%
-  inflate(center = unique(dat$X)) %>%
-  mutate(dist = abs(X - center)) %>%
-  filter(dist <= span) %>%
+  inflate(center = unique(dat$X)) %>%   #expands a dataset to include all combinations of X
+  mutate(dist = abs(X - center)) %>%    
+  filter(dist <= span) %>%              # filter days within 7 days of the current day
   mutate(weight =  1)
 
 dat2 %>% filter(center %in% c(-125, -55)) %>%
   ggplot(aes(X, Y)) +   
-  geom_point(aes(alpha = weight)) +
+  geom_point(aes(alpha = weight)) +       # points within 7 days of -125 and -55
   geom_smooth(aes(group = center, frame = center, weight = weight), 
               method = "lm", formula=y~1, se = FALSE) +
   geom_vline(aes(xintercept = center, frame = center), lty = 2) +
   geom_point(shape = 1, data = dat)
+
 ```
 
 
@@ -405,7 +406,7 @@ X <- select(train_set , pixel0:pixel783) %>% as.matrix()
 Rows and columns of matrices can be accessed like this:
 
 ```{r}
-thrid_row <- X[3,]
+third_row <- X[3,]
 tenth_column <- X[,10]
 ```
 
@@ -494,7 +495,7 @@ This already improves over the logistics model. Let's see why this is:
 f_hat <- predict(knn_fit, newdata = true_f)[,2]
 g1 <- true_f %>% mutate(f_hat = f_hat) %>%
   ggplot(aes(X_1, X_2, fill=f_hat))  +
-  scale_fill_gradientn(colors=c("#00BFC4","white","#F8766D")) + geom_raster()  + guides(fill=FALSE) +  
+  scale_fill_gradientn(colors=c("#F8766D","white","#00BFC4")) + geom_raster()  + guides(fill=FALSE) +  
   stat_contour(aes(x=X_1,y=X_2,z=f_hat),data=true_f, breaks=c(0.5),color="black",lwd=1.5)
 
 g2 <- ggplot(true_f) +  
@@ -517,7 +518,7 @@ confusionMatrix(tab)$overall["Accuracy"]
 
 ## Over Training
 
-Over-training is at its worse when we set a $k=1$. In this case we ill obtain perfect accuracy in the training set because each point is used to predict itself. So perfect accuracy must happen by definition. However, the test set accuracy is actually worse than logistics regression.
+Over-training is at its worse when we set a $k=1$. In this case we ill obtain perfect accuracy in the training set because each point is used to predict itself. So perfect accuracy must happen by definition. However, the test set accuracy is slightly better than logistics regression.
 
 ```{r}
 knn_fit_1 <- knn3(y~.,data = select(train_set, y, X_1, X_2), k=1)
@@ -540,7 +541,9 @@ g1 <- true_f %>% mutate(f_hat = f_hat) %>%
   stat_contour(aes(x=X_1,y=X_2,z=f_hat),data=true_f, breaks=c(0.5),color="black",lwd=1.5)
 
 g2 <- ggplot(true_f) +  
-  geom_point(data=train_set, aes(x=X_1, y=X_2, fill=label), cex=5, pch=21) + stat_contour(aes(X_1,X_2,z=f_hat), breaks=c(0.5),color="black",lwd=1.5) 
+  geom_point(data=train_set, aes(x=X_1, y=X_2, fill=label), cex=5, pch=21) +
+  scale_fill_manual(name="", values=c("#00BFC4","#F8766D")) +
+  stat_contour(aes(X_1,X_2,z=f_hat), breaks=c(0.5),color="black",lwd=1.5) 
   
 library(gridExtra)
 grid.arrange(g1,g2, nrow=1)
@@ -564,7 +567,9 @@ g1 <- true_f %>% mutate(f_hat = f_hat) %>%
   stat_contour(aes(x=X_1,y=X_2,z=f_hat),data=true_f, breaks=c(0.5),color="black",lwd=1.5)
 
 g2 <- ggplot(true_f) +  
-  geom_point(data=train_set, aes(x=X_1, y=X_2, fill=label), cex=5, pch=21) + stat_contour(aes(X_1,X_2,z=f_hat), breaks=c(0.5),color="black",lwd=1.5) 
+  geom_point(data=train_set, aes(x=X_1, y=X_2, fill=label), cex=5, pch=21) +
+  scale_fill_manual(name="", values=c("#00BFC4","#F8766D")) +
+  stat_contour(aes(X_1,X_2,z=f_hat), breaks=c(0.5),color="black",lwd=1.5) 
   
 library(gridExtra)
 grid.arrange(g1,g2, nrow=1)

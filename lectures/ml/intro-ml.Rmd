@@ -1,5 +1,5 @@
 ---
-output: word_document
+output: html_document
 ---
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -64,10 +64,10 @@ Originally humans had to sort these but today, thanks to machine learning algori
 ```{r, echo=FALSE, cache=TRUE}
 url <- "https://raw.githubusercontent.com/datasciencelabs/data/master/hand-written-digits-train.csv"
 digits <- read_csv(url)
-tmp <- lapply( c(1,4,5), function(i){
-    expand.grid(Row=1:28, Column=1:28) %>%  
-      mutate(id=i, label=digits$label[i],  
-             value = unlist(digits[i,-1])) 
+tmp <- lapply( c(1,4,5), function(i){            # row 1, 4, 5
+    expand.grid(Row=1:28, Column=1:28) %>%      #grid of 28 by 28
+      mutate(id=i, label=digits$label[i],        # label of row 1, 4, 5
+             value = unlist(digits[i,-1]))       # unlist to vector
 })
 tmp <- Reduce(rbind, tmp)
 tmp %>% ggplot(aes(Row, Column, fill=value)) + 
@@ -75,6 +75,21 @@ tmp %>% ggplot(aes(Row, Column, fill=value)) +
     scale_y_reverse() +
     scale_fill_gradient(low="white", high="black") +
     facet_grid(.~label)
+
+#to understand what the above is doing
+m<-data.frame(data=cbind(sample(c(1,2),30,replace=TRUE,prob=c(0.5,0.5))), cbind(rnorm(30,0), rnorm(30,2), rnorm(30,4),  rnorm(30,5)))
+names(m)<-c("Label", "Col1", "Col2", "Col3", "Col4")
+m$Col1[1]   # first row value
+m$Col1[3]   # first row value
+unlist(m[4,])   #unlist row 4
+unlist(m[4,-2])   #unlist row 4, except col 2
+tmp1 <- lapply( c(1,4,5), function(i){            # row 1, 4,5
+    expand.grid(Row=1:2, Column=1:2) %>%        #grid of 2 by 2
+      mutate(id=i, label=m$Label[i],         # label of row 1, 4, 5
+             value = unlist(m[i,-1]))        # unlist to vector
+})
+tmp1 <- Reduce(rbind, tmp1)
+
 ```
 
 The images are converted into $28 \times 28$ pixels and for each we obtain an grey scale intensity between 0 (white) to 256 (black). We can see these values like this:
@@ -95,7 +110,6 @@ How many features are availalbe to us for prediction?
 So for each digit $i$ we have an outcome $Y_i$ which can be one of 10 categories: $0,1,2,3,4,5,6,7,8,9$ and features $X_{i,1}, \dots, X_{i,784}$ which can take values from 0 to 255. We use bold face to denote this vector of predictors $\mathbf{X}_i = (X_{i,1}, \dots, X_{i,784})$.
 
 The machine learning tasks is to build a predictor function, $f$ that converts $\mathbf{X}$ into a prediction category $\hat{Y}_i = f(\mathbf{X}_i)$. This may seem impossible right now. We will go step-by-step. You already know some of the techniques we are about to use.
-
 
 
 ## Conditional Probabilities and Expectations
@@ -264,7 +278,7 @@ To mimic an actual machine learning challenge. We will act as if we don't know t
 set.seed(5)
 trainIndex <- sample(rep(c(TRUE, FALSE),c(nrow(dat)-30,30)))
 dat <- mutate(dat, train = trainIndex) 
-x````
+````
 
 We will evaluate our approach by applying our algorithm to the test set and, only after applying the model, we will peek at the outcome and build a confusion matrix. 
 
@@ -474,11 +488,10 @@ dat27 <- digits %>% filter(label%in%c(2,7))
 dat27 <- mutate(dat27, label =  as.character(label))
 ```
 
-
 Note that to distinguish 2s from 7s it might be enough to look at the number of non-white pixels in the upper-left and lower-bottom quadrants:
 
 ```{r, echo=FALSE}
-tmp <- lapply( c(40,45), function(i){
+tmp <- lapply( c(40,45), function(i){         # row 40 and 45
     expand.grid(Row=1:28, Column=1:28) %>%  
       mutate(id=i, label=dat27$label[i],  
              value = unlist(dat27[i,-1])) 
@@ -486,7 +499,7 @@ tmp <- lapply( c(40,45), function(i){
 tmp <- Reduce(rbind, tmp)
 tmp %>% ggplot(aes(Row, Column, fill=value)) + 
     geom_raster() + 
-    scale_y_reverse() +
+   scale_y_reverse() +
     scale_fill_gradient(low="white", high="black") +
     facet_grid(.~label) + 
     geom_vline(xintercept = 14.5) +
@@ -497,14 +510,31 @@ So we will define two features $X_1$ and $X_2$ as the percent of non-white pixel
 
 ```{r}
 row_column <- expand.grid(row=1:28, col=1:28)
-ind1 <- which(row_column$col <= 14 & row_column$row <=14)
-ind2 <- which(row_column$col > 14 & row_column$row > 14)
+ind1 <- which(row_column$col <= 14 & row_column$row <=14) #top left quadrant
+ind2 <- which(row_column$col > 14 & row_column$row > 14)  #bottom right quadrant
 ind <- c(ind1,ind2)
 X <- as.matrix(dat27[,-1])
 X <- X>200
 X1 <- rowSums(X[,ind1])/rowSums(X)
 X2 <- rowSums(X[,ind2])/rowSums(X)
 dat27 <- mutate(dat27, X_1 = X1, X_2 = X2)
+
+
+# Figure out what the above is doing!!!
+r_c <- expand.grid(row=1:4, col=1:4)
+i1 <- which(r_c$col<=2 & r_c$row <= 2)
+i2 <- which(r_c$col>2 & r_c$row > 2)
+i  <- c(i1,i2)
+M <- as.matrix(m[,-1])
+M <- M > 2
+M1 <- rowSums(M[,i1])/rowSums(M)
+M2 <- rowSums(M[,i2])/rowSums(M)
+dat27 <- mutate(dat27, X_1 = X1, X_2 = X2)
+
+r <- matrix(1:4,2,2)
+div.2 <- r %% 2 == 0
+which(div.2)
+
 ```
 
 For illustrative purposes we consider this to be the population and use this data to define an $f(X_1, X_2)$. Here is $f$ as a function of $X_1, X_2)$.
@@ -552,7 +582,8 @@ test_set <- slice(dat, -inTrain$Resample1)
 We can visualize the training data now using color to denote the classes:
 
 ```{r}
-train_set %>% ggplot(aes(X_1, X_2, fill = label)) +
+train_set %>% ggplot(aes(X_1, X_2, fill = label)) +  
+  scale_fill_manual(name="", values=c("#00BFC4","#F8766D")) +
   geom_point(pch=21,cex=5) 
 ```
 
