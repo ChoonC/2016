@@ -97,7 +97,7 @@ One very powerful approach  in it's simplicty and speed is to filter columns bas
 X[ , colMeans(X)>3]
 ```
 
-We can also do thigs like this:
+We can also do things like this:
 
 ```{r}
 X[X<1] <- 0.5
@@ -121,7 +121,7 @@ X - rowMeans(X)
 we can scale each row like this:
 
 ```{r}
-(X - rowMeans(X)) /sd(X)
+(X - rowMeans(X)) /rowSds(X)
 ```
 
 but be careful, it does not work for columns. for columns do this
