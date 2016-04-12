@@ -1,6 +1,10 @@
 ---
 title: "Money Ball"
+<<<<<<< HEAD
 output: word_document
+=======
+output: html_document
+>>>>>>> course/master
 ---
 
 **This homework is due Sunday March 27, 2016 at 11:59PM EST. When complete, submit your code in an R Markdown file and the knitted HTML via GitHub.**

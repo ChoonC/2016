@@ -30,7 +30,11 @@ dat <- digits %>% filter(label%in%c(2,7))
 
 For illustrative purposes we created two features: `X_1` is the percent of black pixels that are in the top left quadrant and `X_2` is the percent of black pixels that are in the bottom left quadrant:
 
+<<<<<<< HEAD
 ```{r, fig.align="center", fig.width=14}
+=======
+```{r, echo=FALSE, fig.align="center", fig.width=14}
+>>>>>>> course/master
 tmp <- lapply( c(37,9,5,28), function(i){
     expand.grid(Row=1:28, Column=1:28) %>%  
       mutate(id=i, label=dat$label[i], id=paste("obs",i),
@@ -49,7 +53,11 @@ tmp %>% ggplot(aes(Row, Column, fill=value)) +
 
 We can create these new predictors like this:
 
+<<<<<<< HEAD
 ```{r, cache=TRUE}
+=======
+```{r, echo=FALSE, cache=TRUE}
+>>>>>>> course/master
 ##Get the truth
 dat <- mutate(dat, label =  as.character(label)) %>% 
   mutate(y = ifelse(label=="2",0,1 ))
@@ -364,7 +372,11 @@ test_set <- slice(dat, -inTrain$Resample1)
 
 
 ```{r}
+<<<<<<< HEAD
 train_set %>% ggplot(aes(X_1,X_2,fill=label)) + geom_point(cex=5, pch=21) +   scale_fill_manual(name="", values=c("#00BFC4","blue","#F8766D"))
+=======
+train_set %>% ggplot(aes(X_1,X_2,fill=label)) + geom_point(cex=5, pch=21)
+>>>>>>> course/master
 ```
 
 
@@ -390,8 +402,12 @@ tmp <- true_f %>% mutate(pred=pred)
 tmp %>% ggplot() +
   stat_contour(aes(x=X_1,y=X_2,z=pred),
                breaks=c(1,2,3),color="black",lwd=1.5) +
+<<<<<<< HEAD
   geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21) + 
   scale_fill_manual(name="", values=c("#00BFC4","blue","#F8766D"))
+=======
+  geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21)
+>>>>>>> course/master
 ```
 
 #### QDA
@@ -415,12 +431,20 @@ tmp <- true_f %>% mutate(pred=pred)
 tmp %>% ggplot() +
   stat_contour(aes(x=X_1,y=X_2,z=pred),
                breaks=c(1,2,3),color="black",lwd=1.5) +
+<<<<<<< HEAD
   geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21) + 
   scale_fill_manual(name="", values=c("#00BFC4","blue","#F8766D"))
 ```
 
 
 #### GLM logistic
+=======
+  geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21)
+```
+
+
+#### GLM
+>>>>>>> course/master
 ```{r}
 library(caret)
 
@@ -440,8 +464,12 @@ tmp <- true_f %>% mutate(pred=pred)
 tmp %>% ggplot() +
   stat_contour(aes(x=X_1,y=X_2,z=pred),
                breaks=c(1,2,3),color="black",lwd=1.5) +
+<<<<<<< HEAD
   geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21) + 
   scale_fill_manual(name="", values=c("#00BFC4","blue","#F8766D"))
+=======
+  geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21)
+>>>>>>> course/master
 ```
 
 
@@ -457,9 +485,13 @@ tmp <- true_f %>% mutate(pred=pred)
 tmp %>% ggplot() +
   stat_contour(aes(x=X_1,y=X_2,z=pred),
                breaks=c(1,2,3),color="black",lwd=1.5) +
+<<<<<<< HEAD
   geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21) +
   scale_fill_manual(name="", values=c("#00BFC4","blue","#F8766D"))
   
+=======
+  geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21)
+>>>>>>> course/master
 ```
 
 
@@ -475,9 +507,20 @@ tmp <- true_f %>% mutate(pred=pred)
 tmp %>% ggplot() +
   stat_contour(aes(x=X_1,y=X_2,z=pred),
                breaks=c(1,2,3),color="black",lwd=1.5) +
+<<<<<<< HEAD
   geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21) + scale_fill_manual(name="", values=c("#00BFC4","blue","#F8766D"))
 ```
 
+=======
+  geom_point(aes(X_1,X_2,fill=label), dat=test_set,pch=21)
+```
+
+
+
+
+
+
+>>>>>>> course/master
 #### Comparison
 
 ```{r}

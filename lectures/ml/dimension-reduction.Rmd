@@ -51,7 +51,11 @@ as.matrix(d)[1,2]
 #### Assessment
 If I center the data by removing the average from both columns, does the distance between pairs of twins change?
 
+<<<<<<< HEAD
 We will go ahead and center the data:
+=======
+We will go ahead a center the data:
+>>>>>>> course/master
 ```{r}
 X <- sweep(X, 2, colMeans(X))
 ##Can also do this (advanced): X <- t(t(X) - rowMeans(t(X)))
@@ -64,9 +68,12 @@ Let's start with the naive approach of simply removing one of the two dimensions
 ```{r}
 Z <- X[,1]
 
+<<<<<<< HEAD
 #dist(X) is distance between every pair X1, X2
 #sqrt((0.172--1.1812)^2+(0268--2.511)^2),....
 #dist(Z) distance between every X1 and X1
+=======
+>>>>>>> course/master
 mypar(1,2)
 plot(dist(X), dist(Z))
 abline(0,1)
@@ -76,7 +83,11 @@ plot(dist(X), dist(Z))
 abline(0,1)
 ```
 
+<<<<<<< HEAD
 Note that there is a strong correlation, but can we improve it? Furthermore, the actual distance is generally underestimated. This is actually to expected since we are adding more things in the actual distance. If instead we average and use this distance, 
+=======
+Note that there is a strong correlation, but can we improve it? Furthermore, the actual distance is generally underestimated. This is actually to expected since we are adding more thing sin the actual distance. If instead we average and use this distance, 
+>>>>>>> course/master
 
 $$\sqrt{ \frac{1}{2} \sum_{j=1}^2 (X_{i,j}-X_{i,j})^2 }$$
 
@@ -175,7 +186,11 @@ A^{-1} = \,
 \implies
 $$
 
+<<<<<<< HEAD
 #### Orthogogal transformations (advanced)
+=======
+#### Orthogogal transformations (advaced)
+>>>>>>> course/master
 
 Note that we redefined distance above to account for the difference in dimensions. We can actually guarantee that the distance scales remain the same if we re-scale the columns of $A$ to assure that the sum of squares are 1:
 
@@ -320,7 +335,11 @@ library(Biobase)
 library(GSE5859) 
 ##to intsall GSE5859
 ##library(devtools)
+<<<<<<< HEAD
 ##install_github("genomicsclass/GSE5859")
+=======
+##install_github("genomicsclass/GSE5859""")
+>>>>>>> course/master
 data(GSE5859)
 ###The data needs some clean up
 ### and we do this with packages from the Bioconductor proejct. 

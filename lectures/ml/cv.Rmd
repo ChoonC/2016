@@ -1,6 +1,10 @@
 ---
 title: "cv"
+<<<<<<< HEAD
 output: word_document
+=======
+output: html_document
+>>>>>>> course/master
 ---
 
 ## Cross validation
@@ -38,7 +42,11 @@ There a test set with no labels given:
 ```{r}
 url <- "https://raw.githubusercontent.com/datasciencelabs/data/master/hand-written-digits-test.csv"
 original_test<- read_csv(url)
+<<<<<<< HEAD
 #View(original_test)
+=======
+View(original_test)
+>>>>>>> course/master
 ```
 
 ## Data Exploration
@@ -63,13 +71,21 @@ tmp <- tmp %>% gather(feature, value, `0`:`783`)
 tmp <- tmp %>% mutate(feature = as.numeric(feature))
 tmp <- tmp %>% mutate(row = feature%%28, col =floor(feature/28))
 tmp <- tmp %>% mutate(row = floor(row/4), col = floor(col/4))
+<<<<<<< HEAD
 View(tmp %>% filter(obs==1))
+=======
+>>>>>>> course/master
 tmp <- tmp %>% group_by(obs, row, col) 
 tmp <- tmp %>% summarize(label = label[1], value = mean(value)) 
 tmp <- tmp %>% ungroup
 tmp <- tmp %>%  mutate(feature = sprintf("X_%02d_%02d",col,row))
+<<<<<<< HEAD
 tmp1 <- tmp %>%  select(-row, -col) 
 tmp1 <- tmp1 %>% group_by(obs) %>% spread(feature, value) %>% ungroup %>% select(-obs)
+=======
+tmp <- tmp %>%  select(-row, -col) 
+tmp <- tmp %>% group_by(obs) %>% spread(feature, value) %>% ungroup %>% select(-obs)
+>>>>>>> course/master
 ```
 
 Let's write a function
@@ -104,9 +120,13 @@ Note that some features are almost always 0:
 
 ```{r}
 library(caret)
+<<<<<<< HEAD
 #you wouldn't usually set the seed, only for reproducible
 set.seed(1)
 # Split the original data into 90% training, 10% test 
+=======
+set.seed(1)
+>>>>>>> course/master
 inTrain <- createDataPartition(y = dat$label,
                                p=0.9)$Resample
 X <- dat %>% select(-label) %>% slice(inTrain) %>% as.matrix
@@ -123,7 +143,10 @@ keep_columns <- which(column_means>10)
 Let's define the training data and test data:
 
 ```{r}
+<<<<<<< HEAD
 # add 1 back for label cause it was removed earlier
+=======
+>>>>>>> course/master
 train_set <- slice(dat, inTrain) %>% select(label, keep_columns+1)
 test_set <- slice(dat, -inTrain) %>% select(label, keep_columns+1)
 ```
@@ -138,10 +161,18 @@ image(as.matrix(d))
 plot(hclust(d),labels=as.character(X$label))
 ``` 
 
+<<<<<<< HEAD
 ```{r}
 # for class demo, use sample of 5000 rather than all 40000
 tmp = sample_n(train_set,5000)
 #20 fold cross validation
+=======
+
+
+```{r}
+tmp = sample_n(train_set,5000)
+
+>>>>>>> course/master
 control <- trainControl(method='cv', number=20)
 res <- train(label ~ .,
              data = tmp,
@@ -152,10 +183,16 @@ res <- train(label ~ .,
 
 plot(res)
 
+<<<<<<< HEAD
 # in class example, 3 gave the optimal accuracy so k=3
 fit <- knn3(label~., train_set, k=3)
 pred <- predict(fit, newdata = test_set, type="class")
  
+=======
+fit <- knn3(label~., train_set, k=3)
+pred <- predict(fit, newdata = test_set, type="class")
+
+>>>>>>> course/master
 tab <- table(pred, test_set$label)
 confusionMatrix(tab)
 ```
@@ -169,6 +206,7 @@ test <- compress(original_test)
 test <- test %>% select(label, keep_columns+1)
 pred <- predict(fit, newdata = test, type="class")
 
+<<<<<<< HEAD
 # check by eye as we don't have the label
 i=12
 pred[i]
@@ -181,6 +219,12 @@ i=54
 pred[wrong[i]]
 
 
+=======
+i=11
+pred[i]
+plotit(original_test,i)
+
+>>>>>>> course/master
 res <- data.frame(ImageId=1:nrow(test),Label=as.character(pred))
 write.csv(res, file="test.csv", row.names=FALSE)
 ```
