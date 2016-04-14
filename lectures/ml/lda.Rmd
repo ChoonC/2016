@@ -1,5 +1,5 @@
 ---
-output: html_document
+output: word_document
 ---
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}

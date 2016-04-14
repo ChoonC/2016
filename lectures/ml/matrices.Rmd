@@ -1,6 +1,7 @@
 ---
+title: "Matrices in R"
+output: word_document
 layout: page
-title: Matrices in R
 ---
 
 ```{r}
@@ -125,11 +126,8 @@ X - rowMeans(X)
 we can scale each row like this:
 
 ```{r}
-<<<<<<< HEAD
 (X - rowMeans(X)) /rowSds(X)
-=======
-(X - rowMeans(X)) /sd(X)
->>>>>>> course/master
+
 ```
 
 but be careful, it does not work for columns. for columns do this
