@@ -28,7 +28,7 @@ X[2,3]
 We can extract columns like this:
 
 ```{r}
-X[,c(1,2)]
+X[ ,c(1,2)]
 ```
 
 and rows like this:
@@ -127,7 +127,10 @@ we can scale each row like this:
 
 ```{r}
 (X - rowMeans(X)) /rowSds(X)
+<<<<<<< HEAD
 
+=======
+>>>>>>> course/master
 ```
 
 but be careful, it does not work for columns. for columns do this

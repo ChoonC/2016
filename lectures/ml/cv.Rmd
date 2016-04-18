@@ -144,11 +144,18 @@ Let's define the training data and test data:
 
 ```{r}
 <<<<<<< HEAD
+<<<<<<< HEAD
 # add 1 back for label cause it was removed earlier
 =======
 >>>>>>> course/master
 train_set <- slice(dat, inTrain) %>% select(label, keep_columns+1)
 test_set <- slice(dat, -inTrain) %>% select(label, keep_columns+1)
+=======
+train_set <- slice(dat, inTrain) %>% 
+  select(label, keep_columns+1)
+test_set <- slice(dat, -inTrain) %>% 
+  select(label, keep_columns+1)
+>>>>>>> course/master
 ```
 
 Note that the distances look a bit cleaner:
